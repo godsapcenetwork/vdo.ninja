@@ -76,7 +76,7 @@ async function main() {
 		}
 	}
 	
-	if (location.hostname !== "vdo.ninja" && location.hostname !== "backup.vdo.ninja" && location.hostname !== "proxy.vdo.ninja" && location.hostname !== "obs.ninja") {
+	if (location.hostname !== "vdo.ninja" && location.hostname !== "backup.vdo.ninja" && location.hostname !== "proxy.vdo.ninja" && location.hostname !== "alt.vdo.ninja" && location.hostname !== "obs.ninja") {
 		errorReport = false;
 
 		if (location.hostname === "rtc.ninja") {
@@ -108,8 +108,15 @@ async function main() {
 		}
 		try {
 			if (ln_template === false) {
-				changeLg("blank");
+				if (location.hostname === "china.vdo.ninja"){
+					changeLg("cn");
+				} else {
+					changeLg("blank");
+				}
 			}
+			if (location.hostname === "china.vdo.ninja"){
+				session.wss = "wss://china.rtc.ninja:8443";
+			} 
 			//getById("mainmenu").style.opacity = 1;
 
 			getById("qos").innerHTML = '<i class="las la-plug"></i>';
@@ -128,6 +135,10 @@ async function main() {
 	} else {
 		// check if automatic language translation is available
 		getById("mainmenu").style.opacity = 1;
+		
+		if (location.hostname === "alt.vdo.ninja"){
+			session.wss = "wss://china.rtc.ninja:8443";
+		} 
 	}
 
 	//// translation stuff ends ////

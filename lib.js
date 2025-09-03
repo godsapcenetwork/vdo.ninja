@@ -35836,6 +35836,9 @@ function updateDirectorsVideo(data, UUID) {
 					input.max = 5;
 					input.min = 0.2;
 					input.step = 0.00001;
+				} else if (i === "exposureTime") {
+					input.min = data.cameraConstraints[i].min;
+					input.max = Math.min(data.cameraConstraints[i].max, 2000);
 				} else {
 					input.min = data.cameraConstraints[i].min;
 					input.max = data.cameraConstraints[i].max;
@@ -37255,6 +37258,9 @@ function listCameraSettings() {
 				if (i === "aspectRatio") {
 					input.max = 5;
 					input.min = 0.2;
+				} else if (i === "exposureTime") {
+					input.min = parseFloat(session.cameraConstraints[i].min);
+					input.max = Math.min(parseFloat(session.cameraConstraints[i].max), 2000);
 				} else {
 					input.min = parseFloat(session.cameraConstraints[i].min);
 					input.max = parseFloat(session.cameraConstraints[i].max);

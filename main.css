@@ -6843,9 +6843,6 @@ textarea::placeholder {
 .darktheme :-moz-placeholder { color: var(--muted-icon, #c8ccd4) !important; }
 
 
-/* Light theme icon subtlety */
-.column.card .las { color: #5b6574; }
-
 /* 13) High-contrast treatment for copy links (reshare) */
 /* The anchor element itself carries .grabLinks; ensure we target it directly */
 a.grabLinks:link,
@@ -6914,8 +6911,6 @@ ul#audioSource3 input:checked + label {
 
 /* Controls grid buttons: consistent shape & hover */
 .controlsGrid button {
-    border-radius: 8px;
-    padding: 6px 8px;
     box-shadow: 0 1px 2px rgba(0,0,0,0.2);
     transition: transform .08s ease, box-shadow .15s ease, filter .15s ease;
 }
