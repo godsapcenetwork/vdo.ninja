@@ -2079,27 +2079,6 @@ async function main() {
 		session.cleanOutput = true;
 	}
 	
-	if (urlParams.has('timeouts')) {
-		try {
-			// Process each value, preserving existing ones when no value provided
-			// &timeouts=1000,3000 (updates first two values, keeps rest)
-			// &timeouts=,,,10 (updates only 4th value)
-			// &timeouts= (no changes)
-			// &timeouts=1000,abc,3000 (updates first and third, ignores invalid value)
-			// Guide here: https://gist.github.com/steveseguin/f754a3c9b97a9a091226c8dbc5dc654a
-		  urlParams.get('timeouts').split(',').forEach((val, index) => {
-			if (val !== '') {
-			  const parsedVal = parseInt(val, 10);
-			  if (!isNaN(parsedVal)) {
-				session.reconnectSpeed[index] = parsedVal;
-			  }
-			}
-		  });
-		} catch(e){
-			errorlog(e);
-		}
-	}
-
 	if (urlParams.has("retransmit")) {
 		session.retransmit = true;
 		session.dataMode = true;
@@ -4121,12 +4100,12 @@ async function main() {
 		if (!preset) {
 			return;
 		}
-	Object.keys(preset).forEach(key => {
-		const value = preset[key];
-		const sessionKey = key;
-		session[sessionKey] = value;
-	});
-}
+		Object.keys(preset).forEach(key => {
+			const value = preset[key];
+			const sessionKey = key;
+			session[sessionKey] = value;
+		});
+	}
 
 	if (urlParams.has("chunkprofile")) {
 		const profileName = (urlParams.get("chunkprofile") || "").toLowerCase();
@@ -5260,21 +5239,6 @@ async function main() {
 		session.stunOnly = true;
 	}
 
-	//if (!(ChromiumVersion>=57)){
-	//	getById("effectSelector").disabled=true;
-	//	getById("effectSelector3").disabled=true;
-	//	getById("effectSelector").title = "Effects are only support on Chromium-based browsers";
-	//	getById("effectSelector3").title = "Effects are only support on Chromium-based browsers";
-	//	var elementsTmp = document.querySelectorAll('[data-effectsNotice]');
-	//	for (let i = 0; i < elementsTmp.length; i++) {
-	//		elementsTmp[i].style.display = "inline-block";
-	//	}
-	//}
-
-	if (urlParams.has("viewereffect") || urlParams.has("viewereffects") || urlParams.has("ve")) {
-		session.viewereffects = parseInt(urlParams.get("viewereffect")) || parseInt(urlParams.get("ve")) || false;
-	}
-
 	if (urlParams.has("activespeaker") || urlParams.has("speakerview") || urlParams.has("sas")) {
 		session.activeSpeaker = urlParams.get("activespeaker") || urlParams.get("speakerview") || urlParams.get("sas") || 1;
 		session.activeSpeaker = parseInt(session.activeSpeaker);
@@ -5755,55 +5719,6 @@ async function main() {
 			}
 		}
 	}
-
-	// Reconnection tuning flags (0/off/false disable where applicable)
-	try {
-		if (urlParams.has("icequick")) {
-			const raw = (urlParams.get("icequick") || "").toString().toLowerCase();
-			if (raw === "off" || raw === "false" || raw === "0") { session.iceQuickRestartDelay = 0; }
-			else { const v = parseInt(raw, 10); if (!Number.isNaN(v)) { session.iceQuickRestartDelay = v; } }
-		}
-		if (urlParams.has("icequickios")) {
-			const raw = (urlParams.get("icequickios") || "").toString().toLowerCase();
-			if (raw === "off" || raw === "false" || raw === "0") { session.iceQuickRestartDelayIOS = 0; }
-			else { const v = parseInt(raw, 10); if (!Number.isNaN(v)) { session.iceQuickRestartDelayIOS = v; } }
-		}
-		if (urlParams.has("turncooldown")) {
-			const raw = (urlParams.get("turncooldown") || "").toString().toLowerCase();
-			if (raw === "off" || raw === "false" || raw === "0") { session.turnRotateCooldownMs = 0; }
-			else { const v = parseInt(raw, 10); if (!Number.isNaN(v)) { session.turnRotateCooldownMs = v; } }
-		}
-		if (urlParams.has("icerestartcooldown")) {
-			const raw = (urlParams.get("icerestartcooldown") || "").toString().toLowerCase();
-			if (raw === "off" || raw === "false" || raw === "0") { session.iceRestartCooldownMs = 0; }
-			else { const v = parseInt(raw, 10); if (!Number.isNaN(v)) { session.iceRestartCooldownMs = v; } }
-		}
-		if (urlParams.has("pcsdisconnectms")) {
-			const raw = (urlParams.get("pcsdisconnectms") || "").toString().toLowerCase();
-			if (raw === "off" || raw === "false") { session.pcsDisconnectCloseMs = null; }
-			else { const v = parseInt(raw, 10); if (!Number.isNaN(v)) { session.pcsDisconnectCloseMs = v; } }
-		}
-		if (urlParams.has("rpcdisconnectms")) {
-			const raw = (urlParams.get("rpcdisconnectms") || "").toString().toLowerCase();
-			if (raw === "off" || raw === "false") { session.rpcDisconnectCloseMs = null; }
-			else { const v = parseInt(raw, 10); if (!Number.isNaN(v)) { session.rpcDisconnectCloseMs = v; } }
-		}
-		if (urlParams.has("flowguardms")) {
-			const raw = (urlParams.get("flowguardms") || "").toString().toLowerCase();
-			if (raw === "off" || raw === "false" || raw === "0") { session.flowGuardMs = 0; }
-			else { const v = parseInt(raw, 10); if (!Number.isNaN(v)) { session.flowGuardMs = v; } }
-		}
-		if (urlParams.has("flowguardkbps")) {
-			const raw = (urlParams.get("flowguardkbps") || "").toString().toLowerCase();
-			if (raw === "off" || raw === "false") { session.flowGuardKbps = 0; }
-			else { const v = parseInt(raw, 10); if (!Number.isNaN(v)) { session.flowGuardKbps = v; } }
-		}
-		if (urlParams.has("flowguardpingms")) {
-			const raw = (urlParams.get("flowguardpingms") || "").toString().toLowerCase();
-			if (raw === "off" || raw === "false" || raw === "0") { session.flowGuardPingMs = 0; }
-			else { const v = parseInt(raw, 10); if (!Number.isNaN(v)) { session.flowGuardPingMs = v; } }
-		}
-	} catch(e) { errorlog(e); }
 
 	if (urlParams.has("osc") || urlParams.has("api")) {
 		if (urlParams.get("osc") || urlParams.get("api")) {
